@@ -1,0 +1,99 @@
+
+TABLES:
+/br_reactor/
+Key              |  |Value
+type| value      |ID|
+----+------------+--+----+
+nil |            | a|nil |            
+bool|true        | b|...
+num |123.5       | c|
+strg|"abcdef"  | d|...
+"st"|"Long Text >| e|
+func|f0123       | f|...
+usrd|u0123       | g|
+thrd|t0123       | h|...
+tabl|t123456     | i|
+tabl|{a=t123,   >| j|
+----+------------+--+
+>
+
+FUNCTIONS CALLS/ COMMANDS:
+/br_reactor/=func(a, b, c)
+ID|type| value      
+--+----+
+ a|nil |            
+ b|bool|true        
+ c|num |123.5       
+ d|strg|"abcdef"  
+ e|strg|"Long Text >
+ f|func|f0123       
+ g|usrd|u0123       
+ h|thrd|T0123       
+ i|tabl|t123
+ j|tabl|t123
+ k|tabl|t123
+--+----+-------------
+>
+
+STRINGS:
+/test/longstring
+abcdef
+adaea
+asese
+...
+--mark string with special foreground/ background color
+--add special "line break" character
+
+
+NUMBERS:
+/test/number
+0
+0.105135
+0x0
+
+
+
+
+COMMAND LINE:
+  1st: <cmd> -> dostring(cmd:gsub("^=" , "return "))
+  2nd: "sh <cmd>" -> shell.execute(cmd, env)
+
+for lua code:
+  local environment
+    default values
+      _G: global_environment
+      _K: list of keys, accessed by string id (middle column) or row number
+      _V: list of values
+      _OBJ: current object
+      _REG: list of known values, accessed by automatic identifier (e.g. t1234 for a table)
+              - >there is an automaticly updated registry (how to save memory with big strings? which types are registered?)
+      _unpack(t): table.unpack(t, 1, table.maxn(t))
+    metatable
+      __newindex = if __index- value existing then apply there else apply at object end
+      __index = 1st: default values, 2nd: object, 3rd: global_environment
+    stdio, event code
+      redirect to special view, when used
+  ideas to name the 'path':
+    if the value belongs to a string index, use the string index instead of a generic name
+    if it was a direct call of a function with a string index, use this index as a name
+  
+for shell code:
+  stdio and event redirect as with lua code
+  use shell.execute(command_line, environment)
+CLICK ON OBJECT:
+  LEFT: 
+    add object reference to command
+  RIGHT:
+    execute for non- functions
+    set command line to = func(* ), where * is the cursor
+
+
+
+
+
+DIMENSIONS:
+(width - 4(separators) - 2(ID)) / 2 - 1,4,8(type)
+(50 - 6)/2 - 8 -> 22 - 8 -> 14
+
+FOR LATER:
+  display tables in content table as a serialized string?

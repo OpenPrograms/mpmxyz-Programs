@@ -1,0 +1,60 @@
+NAME
+  crunch - a source code compressor for OpenComputers
+  
+SYNOPSIS
+  crunch [options] INPUT.lua [OUTPUT, default: INPUT.cr.lua]
+  
+DESCRIPTION
+  compresses lua source files with minimal changes to behaviour
+  The most common use case is to prepare code for an EEPROM.
+  (-> allows using more complex code within the EEPROM limits)
+  
+  Token Compression (lossless)
+  ->remove comments and unnecessary whitespace
+  (to be implemented: shorten strings and numbers)
+  Compression with Tree Parsing
+  ->includes everything from "token compression"
+  ->shortens local variable names (lossless)
+  ->replaces string, number, boolean and nil constants (lossless)
+  ->replaces global variables by local variables (lossy when relying on side effects from outside code or _ENV changes)
+  
+OPTIONS
+  --lz77[=10..230]
+    enables lz77 compression
+    The optional value defaults to 80 and defines the maximum length of a reference.
+    All length values that are higher are used to define an uncompressed sequence of characters.
+    Increasing the maximum reference length therefore reduces the maximum uncompressed sequence length.
+    It is therefore best to find a balance between both extremes. (If you really need those 12 bytes...)
+    
+  --blacklist=name1,name2
+    doesn't touch the given globals
+    That prevents them being replaced by shortened locals.
+    It is necessary e.g. if they are used with side effects from external scripts.
+    
+  --blacklist=*
+    doesn't touch globals at all
+    The output code is guaranteed to behave like the input code but it is a bit larger than normal compressed code.
+    
+  --tree
+    forces tree parsing
+    (->building a parsing table if it doesn't exist)
+    
+  --notree
+    forces using only token compression (-> no variable renaming)
+    
+  --verbose
+    adds verbose output
+  
+EXAMPLES
+  crunch hello.lua
+    compresses the file "hello.lua" using "hello.cr.lua" as output
+
+  crunch --blacklist=_G,table a.lua b.lua
+    compresses "a.lua" while leaving any part referring to the globals "_G" and "table" untouched
+    The output is written to the file "b.lua".
+  
+  crunch --notree edit.lua
+    compresses "edit.lua" using only token compression
+    
+  crunch --lz77 edit.lua
+    compresses "edit.lua" with lz77 compression enabled
