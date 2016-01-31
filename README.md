@@ -1,4 +1,4 @@
-# ocprograms
+# mpmxyz-Programs
 This is a small collection of programs and libraries I wrote for OpenComputers.
 
 # Contents
