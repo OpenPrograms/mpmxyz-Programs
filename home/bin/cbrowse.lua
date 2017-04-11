@@ -1231,8 +1231,10 @@ local function browse(typ, pathName, ...)
                 computer.pushSignal("key_down",  component.keyboard.address, 0,keyboard.keys.left, player)
                 computer.pushSignal("key_up"  ,  component.keyboard.address, 0,keyboard.keys.left, player)
               else
-                --types "=index\n", that should also execute the command
-                computer.pushSignal("clipboard", component.keyboard.address, "="..clickedIndex.."\n", player)
+                --types "=index" and presses enter
+                computer.pushSignal("clipboard", component.keyboard.address, "="..clickedIndex, player)
+                computer.pushSignal("key_down",  component.keyboard.address, 13, keyboard.keys.enter, player)
+                computer.pushSignal("key_up"  ,  component.keyboard.address, 13, keyboard.keys.enter, player)
               end
             end
           end
@@ -1550,7 +1552,7 @@ if doListing then
             if absolutePath:sub(1, 1) ~= "/" then
               absolutePath = fs.concat(os.getenv("PWD") or "/", absolutePath)
             end
-            if filesystem.exists(absolutePath) and not filesystem.isDirectory(absolutePath) then
+            if libname:sub(1, 6) ~= "tools." and filesystem.exists(absolutePath) and not filesystem.isDirectory(absolutePath) then
               addLibrary(libname, absolutePath)
             end
           end
