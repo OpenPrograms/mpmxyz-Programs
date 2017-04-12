@@ -81,7 +81,7 @@ function setset.hash(setOrList, seed, size)
 end
 
 
---returns a function that takes a set and returns a set or list
+--returns a function that takes a set or list and returns a set
 --The returned set will be the same whenever you input a set or list with equal contents.
 function setset.manager(mode, id)
   local set = hashset.new(setset.hash, sets.equals, 1024)
