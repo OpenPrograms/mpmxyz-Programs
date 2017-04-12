@@ -49,7 +49,12 @@ return {
       end
       --don't search working dir
       if dir and prefix and ext and ((dir:sub(1, 2) ~= "./" and dir ~= "") or includeWorkingDir) then
+        local list = {}
         for file in filesystem.list(dir) do
+          table.insert(list, file)
+        end
+        table.sort(list)
+        for _, file in ipairs(list) do
           if file:sub(1, #prefix) == prefix then
             if file:sub(-#ext, -1) == ext then
               local libname = libPrefix .. file:sub(#prefix + 1, -#ext - 1)
