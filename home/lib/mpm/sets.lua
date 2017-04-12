@@ -57,7 +57,7 @@ function sets.equals(a, b)
   --If "b" is a list it is required to have no duplicate values.
   local ka     = next(a)
   local kb, vb = next(b)
-  while ka and kb do
+  while ka ~= nil and kb ~= nil do
     if a[vb] ~= nil then
       ka     = next(a, ka)
       kb, vb = next(b, kb)
@@ -66,7 +66,7 @@ function sets.equals(a, b)
       return false
     end
   end
-  if ka~=kb then
+  if ka ~= kb then
     --different number of elements
     return false
   end
