@@ -27,7 +27,7 @@ tar --numeric-owner -cf tars/qui.tar home/bin/quidemo.lua home/lib/mpm/values.lu
 #pid.tar
 tar --numeric-owner -cf tars/pid.tar home/bin/pid.lua home/bin/gpid.lua home/lib/pid.lua home/lib/mpm/values.lua home/lib/mpm/libarmor.lua home/lib/mpm/qui.lua home/lib/mpm/quidgets.lua home/lib/mpm/qselect.lua home/lib/mpm/qevent.lua home/lib/mpm/stack.lua home/lib/mpm/textgfx.lua usr/man/pid.man
 #pids.tar
-tar --numeric-owner -cf tars/pids.tar home/lib/pid/examples
+tar --numeric-owner -cf tars/pids.tar home/pid/examples
 #cbrowse.tar
 tar --numeric-owner -cf tars/cbrowse.tar home/bin/cbrowse.lua home/lib/mpm/tables.lua home/lib/mpm/draw_buffer.lua home/lib/mpm/component_filter.lua home/lib/mpm/config.lua home/lib/mpm/cache.lua home/lib/mpm/lib.lua home/lib/mpm/values.lua usr/man/cbrowse.man
 #devfs.tar

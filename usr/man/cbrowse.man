@@ -11,6 +11,7 @@ DESCRIPTION
   (includes tab autocompletion for Lua code)
   After hitting enter the command is executed and a list of returned values is displayed if there were any.
   You can return to the previous display via Ctrl+C. The program itself is closed by exiting the top level or via an interrupt. (Ctrl+Alt+C)
+  In newer OpenComputers versions you have to use Ctrl+D to go up and Ctrl+C to exit instead.
   You can reload the display by hitting F5.
   Scrolling is done via Page down/up or via using the mouse wheel.
   

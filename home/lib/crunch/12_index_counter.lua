@@ -5,8 +5,6 @@
 --github page: https://github.com/mpmxyz/ocprograms
 --forum page : none
 -----------------------------------------------------
-local cache     = require("mpm.cache")
-
 return {
   run = function(context, options)
     --This code only works if you know how the code is structured.
