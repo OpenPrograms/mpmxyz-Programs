@@ -9,7 +9,6 @@
   tar archiver for OpenComputers
   for further information check the usage text or man page
   
-  TODO: support non primary tape drives
   TODO: detect symbolic link cycles (-> remember already visited, resolved paths)
 ]]
 local shell     = require 'shell'
@@ -49,6 +48,7 @@ function letter    description
 other options      description
 -f --file FILE      first FILE is archive, else:
                     uses primary tape drive
+--address=ADDRESS   uses tape drive ADDRESS
 -h --dereference    follows symlinks
 --exclude=FILE;...  excludes FILE from archive
 -v --verbose        lists processed files, also
@@ -682,6 +682,11 @@ local function main(...)
   else
     --use tape
     local tapeFile = {drive = component.tape_drive, pos = 0}
+    if type(options.address) == "string" then
+      tapeFile.drive = component.proxy(options.address)
+    end
+    assert(tapeFile.drive, "Error: No tape drive found!")
+    assert(tapeFile.drive.type == "tape_drive", "Error: Address does not point to tape drive!")
     do
       --check for Computronics bug
       local endInversionBug = false

@@ -49,6 +49,9 @@ OTHER OPTIONS
     (When creating an archive, it will be the output file.)
     Without this option the primary tape drive is used instead.
     
+  --address=ADDRESS
+    tell tar to use the tape drive with the given address instead of the primary one
+    
   -h --dereference
     follow symlinks (treating them as files / directories)
     
