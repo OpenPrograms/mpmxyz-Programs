@@ -19,6 +19,7 @@ local draw_buffer      = require("mpm.draw_buffer")
 local component_filter = require("mpm.component_filter")
 local config           = require("mpm.config")
 local valuesLib        = require("mpm.values")
+local mpmlib           = require("mpm.lib")
 
 
 --****DEBUG****
@@ -1529,7 +1530,7 @@ if doListing then
   --find libraries (loaded, preloaded and in lib directory)
   local filesystem = require("filesystem")
   libraries = {}
-  --find libraries in files, TODO: use mpm.lib
+  --find libraries in files
   local libFiles = {}--absolute path -> library (
   local function addLibrary(name, path)
     local oldName = libFiles[path]
@@ -1537,36 +1538,10 @@ if doListing then
       libFiles[path] = name
     end
   end
-  local function addLibs(path, dir, prefix, ext, subPath, libPrefix)
-    if path then
-      dir, prefix, ext, subPath = path:match("^(.-)([^/]*)%?([^/]*)(.-)$")
-      libPrefix = ""
+  for libname, path in mpmlib.list(package.path, false, true) do
+    if libname:sub(1, 6) ~= "tools." then
+      addLibrary(libname, path)
     end
-    --don't search working dir
-    if dir and prefix and ext and dir ~= "./" and dir ~= "" then
-      for file in filesystem.list(dir) do
-        if file:sub(1, #prefix) == prefix then
-          if file:sub(-#ext, -1) == ext then
-            local libname = libPrefix .. file:sub(#prefix + 1, -#ext - 1)
-            local absolutePath = dir .. file .. subPath:sub(2, -1)
-            if absolutePath:sub(1, 1) ~= "/" then
-              absolutePath = fs.concat(os.getenv("PWD") or "/", absolutePath)
-            end
-            if libname:sub(1, 6) ~= "tools." and filesystem.exists(absolutePath) and not filesystem.isDirectory(absolutePath) then
-              addLibrary(libname, absolutePath)
-            end
-          end
-        end
-        if file:sub(-1, -1) == "/" then
-          --directory: recursion
-          --(expects "dir" to end with a slash if it isn't empty
-          addLibs(nil, dir .. file, prefix, ext, subPath, libPrefix .. file:sub(1, -2) .. ".")
-        end
-      end
-    end
-  end
-  for path in package.path:gmatch("[^;]+") do
-    addLibs(path)
   end
   for path, libname in pairs(libFiles) do
     if libraries[libname] == nil then
