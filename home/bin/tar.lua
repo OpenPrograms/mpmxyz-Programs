@@ -683,7 +683,7 @@ local function main(...)
     --use tape
     local tapeFile = {drive = component.tape_drive, pos = 0}
     if type(options.address) == "string" then
-      tapeFile.drive = component.proxy(options.address)
+      tapeFile.drive = component.proxy(assert(component.get(options.address, "tape_drive")))
     end
     assert(tapeFile.drive, "Error: No tape drive found!")
     assert(tapeFile.drive.type == "tape_drive", "Error: Address does not point to tape drive!")
