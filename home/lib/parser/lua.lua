@@ -37,12 +37,16 @@ luaparser.keywords = getInvertable{
 }
 --a collection of all lua symbols
 luaparser.symbols = getInvertable{
-  "+", "-", "*", "/", "%", "^", "#",
+  "+", "-", "*", "/", "%", "^", "#", "//",
+  "<<", ">>", "&", "|", "~",
   "==", "~=", "<=", ">=", "<", ">", "=",
   "(", ")", "{", "}", "[", "]",
   ";", ":", ",", ".", "..", "...",
 }
-
+luaparser.symbols_patterns = {}
+for i, v in ipairs(luaparser.symbols) do
+  luaparser.symbols_patterns = v:gsub("(.)", "%%%1")
+end
 --just a collection of general patterns
 luaparser.patterns = {
   number = "(%d+%.%d*|%.%d+|%d+)([eE][%+%-]?%d+)?|0x(%x+%.%x*|%.%x+|%x+)([pP][%+%-]?%x+)?",
@@ -55,7 +59,7 @@ luaparser.patterns = {
   --keyword (not used for lexer because it would introduce ambiguities with the more general 'name')
   keyword = table.concat(luaparser.keywords, "|"),
   --symbol
-  symbol = table.concat(luaparser.symbols, "|"):gsub("([^%|])","%%%1"),
+  symbol = table.concat(luaparser.symbols_patterns, "|"),
   --quotes
   shortquote = "\"([^\\\"]*(\\.)?)*\"|'([^\\']*(\\.)?)*'",
   longquote = {
@@ -239,13 +243,16 @@ luaparser.grammar = {
   fieldsep = [[',' | ';' ]],
   value = [[nil | false | true | number | string | '...' | functiondef | prefixexp | tableconstructor]],
 }
-
 local operators = {
   {associativity = "r", "^"},
-  {associativity = "ur", "not", "#", "-"},
-  {associativity = "l", "*", "/", "%"},
+  {associativity = "ur", "not", "#", "-", "~"},
+  {associativity = "l", "*", "/", "%", "//"},
   {associativity = "l", "+", "-"},
   {associativity = "r", ".."},
+  {associativity = "l", "<<", ">>"},
+  {associativity = "l", "&"},
+  {associativity = "l", "~"},
+  {associativity = "l", "'|'"},
   {associativity = "l", "<", ">", "<=", ">=", "~=", "=="},
   {associativity = "l", "and"},
   {associativity = "l", "or"},

@@ -779,7 +779,7 @@ parser.loadLanguage = function(language)
     end, nil, "goto.stateSet")
   end, nil, "goto.nextToken")
   
-  getKernel = cache(function(set)
+  local getKernel = cache(function(set)
     local kernelSet = {}
     for _, state in pairs(set) do
       local lr0State = state.LR0
@@ -1013,7 +1013,7 @@ function parser.saveLRTable(lrTable, file)
     end
   end
   --open output file
-  local stream = io.open(file, "w")
+  local stream = assert(io.open(file, "w"))
   --write string array
   stream:write("local s={")
   for _,string in ipairs(strings) do

@@ -136,9 +136,6 @@ for k, group in ipairs(groups) do
   --determine associativity
   local v = analyze(BINARY, group[1], group[1])
   local associativity = (v == "<") and "right" or " left"
-  --draw group
-  table.sort(group)
-  print(associativity .. " associative: " .. table.concat(group, " "))
   --unary
   local finishedUnops = {}
   for i, v in pairs(unops) do
@@ -151,4 +148,7 @@ for k, group in ipairs(groups) do
     table.sort(finishedUnops)
     print("            unary: " .. table.concat(finishedUnops, " "))
   end
+  --draw group
+  table.sort(group)
+  print(associativity .. " associative: " .. table.concat(group, " "))
 end
