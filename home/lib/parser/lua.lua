@@ -45,7 +45,7 @@ luaparser.symbols = getInvertable{
 }
 luaparser.symbols_patterns = {}
 for i, v in ipairs(luaparser.symbols) do
-  luaparser.symbols_patterns = v:gsub("(.)", "%%%1")
+  luaparser.symbols_patterns[i] = v:gsub("(.)", "%%%1")
 end
 --just a collection of general patterns
 luaparser.patterns = {
