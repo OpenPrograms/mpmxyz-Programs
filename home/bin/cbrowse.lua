@@ -1368,6 +1368,10 @@ local function browse(typ, pathName, ...)
         term.setCursor(1, context.height + 1)
         return term.read(history, false, getHint)
       end)
+      if ok and cmd == false then
+        --compatibility with newer term implementation (returns false after Ctrl+C)
+        ok, cmd = false, "interrupted"
+      end
       if not ok then
         if cmd == "interrupted" then
           error("interrupted", 0)
@@ -1539,7 +1543,7 @@ if doListing then
     end
   end
   for libname, path in mpmlib.list(package.path, false, true) do
-    if libname:sub(1, 6) ~= "tools." then
+    if libname:sub(1, 6) ~= "tools." and libname:sub(1,5) ~= "core." then
       addLibrary(libname, path)
     end
   end
@@ -1549,8 +1553,8 @@ if doListing then
       libraries[libname] = lib
     end
   end
-  --add preloaded libraries
-  for libname, loader in pairs(package.preload) do
+  --add preloaded libraries; seems to be missing in newer versions...
+  for libname, loader in pairs(package.preload or {}) do
     if libraries[libname] == nil then
       local ok, lib = pcall(require, libname)
       libraries[libname] = lib
